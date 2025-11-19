@@ -3,7 +3,7 @@
  * Description: This is the framework for the database program. Additional requirements and functionality
  *    are to be built by you and your group.
  */
-
+//CHECKING for commit 
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
