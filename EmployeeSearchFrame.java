@@ -180,7 +180,7 @@ public class EmployeeSearchFrame extends JFrame {
     }
 
     /**
-     * Fills the Department and Project JLists from the database.
+     * Complete this line of Code as disscused prior Prabhakar Shrestha
      */
     private void fillListsFromDatabase() {
         department.clear();
@@ -188,7 +188,7 @@ public class EmployeeSearchFrame extends JFrame {
     }
 
     /**
-     * Constructs and executes the complex SQL query for employee search.
+     Complete this class as disscuesed for Pratik Pokhrel
      */
     private void searchEmployees() {
         textAreaEmployee.setText(""); // Clear previous results
