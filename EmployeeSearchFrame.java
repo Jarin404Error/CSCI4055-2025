@@ -20,6 +20,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
+import javax.swing.JOptionPane;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import java.util.Vector;
+import java.util.List;
+
 
 public class EmployeeSearchFrame extends JFrame {
 
@@ -31,6 +43,17 @@ public class EmployeeSearchFrame extends JFrame {
 	private JList<String> lstProject;
 	private DefaultListModel<String> project = new DefaultListModel<String>();
 	private JTextArea textAreaEmployee;
+	 private JScrollPane scrollPaneDepartment;
+    private JScrollPane scrollPaneProject;
+    private JScrollPane scrollPaneEmployee;
+    private JCheckBox chckbxNotDept;
+    private JCheckBox chckbxNotProject;
+
+
+	private static final String DEFAULT_DB_NAME = "company";
+    private static final String DB_URL_PREFIX = "jdbc:mysql://localhost:3306/";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
 	/**
 	 * Launch the application.
 	 */
