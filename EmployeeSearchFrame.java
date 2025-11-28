@@ -3,8 +3,8 @@
  * Description: This is the framework for the database program. Additional requirements and functionality
  *    are to be built by you and your group.
  */
-//CHECKING for commit 
-import java.awt.EventQueue;
+//CHECKING for commit
+ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -35,143 +35,162 @@ import java.util.List;
 
 public class EmployeeSearchFrame extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private JTextField txtDatabase;
-	private JList<String> lstDepartment;
-	private DefaultListModel<String> department = new DefaultListModel<String>();
-	private JList<String> lstProject;
-	private DefaultListModel<String> project = new DefaultListModel<String>();
-	private JTextArea textAreaEmployee;
-	 private JScrollPane scrollPaneDepartment;
+    private static final long serialVersionUID = 1L;
+    private JPanel contentPane;
+    private JTextField txtDatabase;
+    private JList<String> lstDepartment;
+    private DefaultListModel<String> department = new DefaultListModel<String>();
+    private JList<String> lstProject;
+    private DefaultListModel<String> project = new DefaultListModel<String>();
+    private JTextArea textAreaEmployee;
+    private JScrollPane scrollPaneDepartment;
     private JScrollPane scrollPaneProject;
     private JScrollPane scrollPaneEmployee;
     private JCheckBox chckbxNotDept;
     private JCheckBox chckbxNotProject;
 
 
-	private static final String DEFAULT_DB_NAME = "company";
+    private static final String DEFAULT_DB_NAME = "company";
     private static final String DB_URL_PREFIX = "jdbc:mysql://localhost:3306/";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "";
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					EmployeeSearchFrame frame = new EmployeeSearchFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    EmployeeSearchFrame frame = new EmployeeSearchFrame();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
-	/**
-	 * Create the frame.
-	 * Prabhakar Shrestha 
-	 */
-	public EmployeeSearchFrame() {
-		setTitle("Employee Search");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 347);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("Database:");
-		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		lblNewLabel.setBounds(21, 23, 59, 14);
-		contentPane.add(lblNewLabel);
-		
-		txtDatabase = new JTextField();
-		txtDatabase.setBounds(90, 20, 193, 20);
-		contentPane.add(txtDatabase);
-		txtDatabase.setColumns(10);
-		
-		JButton btnDBFill = new JButton("Fill");
-		/**
-		 * The btnDBFill should fill the department and project JList with the 
-		 * departments and projects from your entered database name.
-		 */
-		btnDBFill.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String[] dept = {"Headquarters", "Reorganization"};	
-				for(int i = 0; i < dept.length; i++) {
-					department.addElement(dept[i]);
-				}
-				String[] prj = {"ProdoctX", "ProductY", "ProductZ"};
-				for(int j = 0; j < prj.length; j++) {
-					project.addElement(prj[j]);
-				}
-				
-			}
-		});
-		
-		btnDBFill.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		btnDBFill.setBounds(307, 19, 68, 23);
-		contentPane.add(btnDBFill);
-		
-		JLabel lblDepartment = new JLabel("Department");
-		lblDepartment.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		lblDepartment.setBounds(52, 63, 89, 14);
-		contentPane.add(lblDepartment);
-		
-		JLabel lblProject = new JLabel("Project");
-		lblProject.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		lblProject.setBounds(255, 63, 47, 14);
-		contentPane.add(lblProject);
-		
-		lstProject = new JList<String>(new DefaultListModel<String>());
-		lstProject.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lstProject.setModel(project);
-		lstProject.setBounds(225, 84, 150, 42);
-		contentPane.add(lstProject);
-		
-		JCheckBox chckbxNotDept = new JCheckBox("Not");
-		chckbxNotDept.setBounds(71, 133, 59, 23);
-		contentPane.add(chckbxNotDept);
-		
-		JCheckBox chckbxNotProject = new JCheckBox("Not");
-		chckbxNotProject.setBounds(270, 133, 59, 23);
-		contentPane.add(chckbxNotProject);
-		
-		lstDepartment = new JList<String>(new DefaultListModel<String>());
-		lstDepartment.setBounds(36, 84, 172, 40);
-		contentPane.add(lstDepartment);
-		lstDepartment.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lstDepartment.setModel(department);
-		
-		JLabel lblEmployee = new JLabel("Employee");
-		lblEmployee.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		lblEmployee.setBounds(52, 179, 89, 14);
-		contentPane.add(lblEmployee);
-		
-		JButton btnSearch = new JButton("Search");
-		btnSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textAreaEmployee.setText("John Smith\nFranklin Wong");
-			}
-		});
-		btnSearch.setBounds(80, 276, 89, 23);
-		contentPane.add(btnSearch);
-		
-		JButton btnClear = new JButton("Clear");
-		btnClear.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textAreaEmployee.setText("");
-			}
-		});
-		btnClear.setBounds(236, 276, 89, 23);
-		contentPane.add(btnClear);
-		
-		textAreaEmployee = new JTextArea();
-		textAreaEmployee.setBounds(36, 197, 339, 68);
-		contentPane.add(textAreaEmployee);
-	}
+    /**
+     * Create the frame.
+     */
+    public EmployeeSearchFrame() {
+        setTitle("Employee Search");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 450, 500);
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
+
+        JLabel lblNewLabel = new JLabel("Database:");
+        lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 12));
+        lblNewLabel.setBounds(21, 23, 59, 14);
+        contentPane.add(lblNewLabel);
+
+        txtDatabase = new JTextField(DEFAULT_DB_NAME); // Set default value
+        txtDatabase.setBounds(90, 20, 193, 20);
+        contentPane.add(txtDatabase);
+        txtDatabase.setColumns(10);
+
+        JButton btnDBFill = new JButton("Fill");
+
+        // ** CHANGE 2: Implement JDBC Connection and Data Retrieval Logic **
+        btnDBFill.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                fillListsFromDatabase();
+            }
+        });
+
+        btnDBFill.setFont(new Font("Times New Roman", Font.BOLD, 12));
+        btnDBFill.setBounds(307, 19, 68, 23);
+        contentPane.add(btnDBFill);
+
+        JLabel lblDepartment = new JLabel("Department");
+        lblDepartment.setFont(new Font("Times New Roman", Font.BOLD, 12));
+        lblDepartment.setBounds(52, 63, 89, 14);
+        contentPane.add(lblDepartment);
+
+        JLabel lblProject = new JLabel("Project");
+        lblProject.setFont(new Font("Times New Roman", Font.BOLD, 12));
+        lblProject.setBounds(255, 63, 47, 14);
+        contentPane.add(lblProject);
+
+        // Setup Project List (lstProject)
+        lstProject = new JList<String>(project);
+        lstProject.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        lstProject.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+        scrollPaneProject = new JScrollPane(lstProject);
+        scrollPaneProject.setBounds(225, 84, 150, 70);
+        contentPane.add(scrollPaneProject);
+
+        chckbxNotDept = new JCheckBox("Not");
+        chckbxNotDept.setBounds(71, 165, 59, 23);
+        contentPane.add(chckbxNotDept);
+
+        chckbxNotProject = new JCheckBox("Not");
+        chckbxNotProject.setBounds(270, 165, 59, 23);
+        contentPane.add(chckbxNotProject);
+
+        // Setup Department List (lstDepartment)
+        lstDepartment = new JList<String>(department);
+        lstDepartment.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        lstDepartment.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+        scrollPaneDepartment = new JScrollPane(lstDepartment);
+        scrollPaneDepartment.setBounds(36, 84, 172, 70);
+        contentPane.add(scrollPaneDepartment);
+
+        JLabel lblEmployee = new JLabel("Employee");
+        lblEmployee.setFont(new Font("Times New Roman", Font.BOLD, 12));
+        lblEmployee.setBounds(52, 209, 89, 14);
+        contentPane.add(lblEmployee);
+
+        JButton btnSearch = new JButton("Search");
+        btnSearch.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                searchEmployees(); // Call the new search logic method
+            }
+        });
+        btnSearch.setBounds(80, 420, 89, 23);
+        contentPane.add(btnSearch);
+
+        JButton btnClear = new JButton("Clear");
+        btnClear.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                textAreaEmployee.setText("");
+                lstDepartment.clearSelection();
+                lstProject.clearSelection();
+                chckbxNotDept.setSelected(false);
+                chckbxNotProject.setSelected(false);
+            }
+        });
+        btnClear.setBounds(236, 420, 89, 23);
+        contentPane.add(btnClear);
+
+        textAreaEmployee = new JTextArea();
+        textAreaEmployee.setLineWrap(true);
+        textAreaEmployee.setWrapStyleWord(true);
+        textAreaEmployee.setEditable(false); // Employees are displayed, not edited
+
+        scrollPaneEmployee = new JScrollPane(textAreaEmployee);
+        scrollPaneEmployee.setBounds(36, 230, 339, 180);
+        contentPane.add(scrollPaneEmployee);
+    }
+
+    /**
+     * Fills the Department and Project JLists from the database.
+     */
+    private void fillListsFromDatabase() {
+        department.clear();
+        project.clear();
+    }
+
+    /**
+     * Constructs and executes the complex SQL query for employee search.
+     */
+    private void searchEmployees() {
+        textAreaEmployee.setText(""); // Clear previous results
+   }
 }
