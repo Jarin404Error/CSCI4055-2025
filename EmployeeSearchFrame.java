@@ -194,10 +194,44 @@ public class EmployeeSearchFrame extends JFrame {
     /**
      * Complete this line of Code as disscused prior Prabhakar Shrestha
      */
-    private void fillListsFromDatabase() {
+	private void fillListsFromDatabase() {
         department.clear();
         project.clear();
-    }
+        textAreaEmployee.setText("");
+
+        try (Connection conn = getConnection()) {
+            if (conn == null) return; // Connection failed and message was already shown
+
+            // --- 1. Populate Department List ---
+            Statement deptStmt = conn.createStatement();
+            ResultSet deptRs = deptStmt.executeQuery("SELECT Dname FROM DEPARTMENT ORDER BY Dname");
+
+            while(deptRs.next()) {
+                department.addElement(deptRs.getString("Dname"));
+            }
+            deptRs.close();
+            deptStmt.close();
+
+            // --- 2. Populate Project List ---
+            Statement projStmt = conn.createStatement();
+            ResultSet projRs = projStmt.executeQuery("SELECT Pname FROM PROJECT ORDER BY Pname");
+
+            while(projRs.next()) {
+                project.addElement(projRs.getString("Pname"));
+            }
+            projRs.close();
+            projStmt.close();
+
+            JOptionPane.showMessageDialog(contentPane, "Database lists populated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(contentPane,
+                    "Database connection or query failed: " + ex.getMessage() + "\nCheck database name, credentials, and server status.",
+                    "Database Error",
+                    JOptionPane.ERROR_MESSAGE);
+        	}
+	}
+
 
     /**
      Complete this class as disscuesed for Pratik Pokhrel
