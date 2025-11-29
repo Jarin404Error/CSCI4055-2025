@@ -202,7 +202,129 @@ public class EmployeeSearchFrame extends JFrame {
     /**
      Complete this class as disscuesed for Pratik Pokhrel
      */
-    private void searchEmployees() {
+   private void searchEmployees() {
         textAreaEmployee.setText(""); // Clear previous results
-   }
+
+        List<String> selectedDepts = lstDepartment.getSelectedValuesList();
+        List<String> selectedProjs = lstProject.getSelectedValuesList();
+
+        boolean isDeptSelected = !selectedDepts.isEmpty();
+        boolean isProjSelected = !selectedProjs.isEmpty();
+        
+        if (!isDeptSelected && !isProjSelected) {
+            JOptionPane.showMessageDialog(contentPane, "Please select at least one Department or Project.", "Search Criteria Missing", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try (Connection conn = getConnection()) {
+            if (conn == null) return;
+
+            StringBuilder sql = new StringBuilder();
+            sql.append("SELECT DISTINCT E.Fname, E.Lname, E.Ssn ");
+            sql.append("FROM EMPLOYEE E ");
+
+            // We will conditionally JOIN based on the selections
+            if (isProjSelected) {
+                sql.append("JOIN WORKS_ON WO ON E.Ssn = WO.Essn ");
+                sql.append("JOIN PROJECT P ON WO.Pno = P.Pnumber ");
+            }
+
+            // Build the WHERE clause
+            sql.append("WHERE 1=1 "); // Start with a true condition for easy AND appending
+
+            // --- Department Filtering ---
+            if (isDeptSelected) {
+                // If NOT Dept is checked, we select employees whose Dno is NOT IN the selected Dnumbers
+                String deptOperator = chckbxNotDept.isSelected() ? "NOT IN" : "IN";
+                
+                // Subquery to get Dnumbers for the selected Dnames
+                sql.append("AND E.Dno ");
+                sql.append(deptOperator);
+                sql.append(" (SELECT Dnumber FROM DEPARTMENT WHERE Dname IN (");
+                
+                // Add placeholders for Dname values
+                for (int i = 0; i < selectedDepts.size(); i++) {
+                    sql.append("?");
+                    if (i < selectedDepts.size() - 1) {
+                        sql.append(", ");
+                    }
+                }
+                sql.append(")) ");
+            }
+
+            // --- Project Filtering ---
+            if (isProjSelected) {
+                // If NOT Project is checked, we use a subquery to select employees whose Ssn is NOT IN the Essn of people working on selected projects
+                if (chckbxNotProject.isSelected()) {
+                    sql.append("AND E.Ssn NOT IN (");
+                    sql.append("SELECT Essn FROM WORKS_ON WO2 JOIN PROJECT P2 ON WO2.Pno = P2.Pnumber WHERE P2.Pname IN (");
+                } else {
+                    // Simple IN condition on the Pname from the JOINed tables
+                    sql.append("AND P.Pname IN (");
+                }
+
+                // Add placeholders for Pname values
+                for (int i = 0; i < selectedProjs.size(); i++) {
+                    sql.append("?");
+                    if (i < selectedProjs.size() - 1) {
+                        sql.append(", ");
+                    }
+                }
+                
+                if (chckbxNotProject.isSelected()) {
+                     sql.append(")) "); // Close Pname IN and Ssn NOT IN
+                } else {
+                    sql.append(") "); // Close Pname IN
+                }
+            }
+            
+            sql.append("ORDER BY E.Lname, E.Fname");
+
+            // --- Execution ---
+            PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+            
+            // Set parameters (Department names first, then Project names)
+            int paramIndex = 1;
+            if (isDeptSelected) {
+                for (String deptName : selectedDepts) {
+                    pstmt.setString(paramIndex++, deptName);
+                }
+            }
+            if (isProjSelected) {
+                for (String projName : selectedProjs) {
+                    pstmt.setString(paramIndex++, projName);
+                }
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+
+            // --- Display Results ---
+            StringBuilder results = new StringBuilder();
+            results.append("SQL Query Executed. Results:\n");
+            
+            if (!rs.isBeforeFirst()) { // Check if the result set is empty
+                results.append("No employees match the specified criteria.");
+            } else {
+                while (rs.next()) {
+                    String fname = rs.getString("Fname");
+                    String lname = rs.getString("Lname");
+                    String ssn = rs.getString("Ssn");
+                    results.append(String.format("%s %s (SSN: %s)\n", fname, lname, ssn));
+                }
+            }
+            
+            textAreaEmployee.setText(results.toString());
+            
+            rs.close();
+            pstmt.close();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(contentPane,
+                    "SQL Error during search: " + ex.getMessage(),
+                    "Database Query Error",
+                    JOptionPane.ERROR_MESSAGE);
+            // Optionally print the generated SQL for debugging
+            // System.err.println("Generated SQL: " + sql.toString()); 
+        }
+    }
 }
