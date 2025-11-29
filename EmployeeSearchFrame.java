@@ -178,7 +178,7 @@ public class EmployeeSearchFrame extends JFrame {
         scrollPaneEmployee.setBounds(36, 230, 339, 180);
         contentPane.add(scrollPaneEmployee);
     }
-/**
+	/**
      * Attempts to establish a connection to the database.
      * @return A valid Connection object, or null if connection fails.
      */
@@ -191,42 +191,49 @@ public class EmployeeSearchFrame extends JFrame {
         String url = DB_URL_PREFIX + dbName;
         return DriverManager.getConnection(url, DB_USER, DB_PASSWORD);
     } 
-    /**
-     * Complete this line of Code as disscused prior Prabhakar Shrestha
-     */
+    
+	/**
+	 * Tested loading process with real database.
+	 */
 	private void fillListsFromDatabase() {
+		
         department.clear();
         project.clear();
         textAreaEmployee.setText("");
 
-        try (Connection conn = getConnection()) {
-            if (conn == null) return; // Connection failed and message was already shown
+		try (Connection conn = getConnection()) {
 
-            // --- 1. Populate Department List ---
-            Statement deptStmt = conn.createStatement();
-            ResultSet deptRs = deptStmt.executeQuery("SELECT Dname FROM DEPARTMENT ORDER BY Dname");
+			if (conn == null)
+				return;
+
+			Statement deptStmt = conn.createStatement();
+			ResultSet deptRs = deptStmt.executeQuery("SELECT Dname FROM DEPARTMENT ORDER BY Dname");
 
 			while (deptRs.next()) {
-				
-                department.addElement(deptRs.getString("Dname"));
-            }
-            deptRs.close();
-            deptStmt.close();
 
-            // --- 2. Populate Project List ---
-            Statement projStmt = conn.createStatement();
-            ResultSet projRs = projStmt.executeQuery("SELECT Pname FROM PROJECT ORDER BY Pname");
+				department.addElement(deptRs.getString("Dname"));
+
+			}
+			deptRs.close();
+			deptStmt.close();
+
+			Statement projStmt = conn.createStatement();
+			ResultSet projRs = projStmt.executeQuery("SELECT Pname FROM PROJECT ORDER BY Pname");
 
 			while (projRs.next()) {
-				
-                project.addElement(projRs.getString("Pname"));
-            }
-            projRs.close();
-            projStmt.close();
 
-            JOptionPane.showMessageDialog(contentPane, "Database lists populated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+				project.addElement(projRs.getString("Pname"));
 
-        } catch (SQLException ex) {
+			}
+			projRs.close();
+			projStmt.close();
+
+			JOptionPane.showMessageDialog(contentPane, "Database lists populated successfully.", "Success",
+					JOptionPane.INFORMATION_MESSAGE);
+
+		} 
+		catch(SQLException ex){
+		
             JOptionPane.showMessageDialog(contentPane,
                     "Database connection or query failed: " + ex.getMessage() + "\nCheck database name, credentials, and server status.",
                     "Database Error",
