@@ -178,7 +178,19 @@ public class EmployeeSearchFrame extends JFrame {
         scrollPaneEmployee.setBounds(36, 230, 339, 180);
         contentPane.add(scrollPaneEmployee);
     }
-
+/**
+     * Attempts to establish a connection to the database.
+     * @return A valid Connection object, or null if connection fails.
+     */
+    private Connection getConnection() throws SQLException {
+        String dbName = txtDatabase.getText().trim();
+        if (dbName.isEmpty()) {
+            JOptionPane.showMessageDialog(contentPane, "Please enter a database name.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        String url = DB_URL_PREFIX + dbName;
+        return DriverManager.getConnection(url, DB_USER, DB_PASSWORD);
+    } 
     /**
      * Complete this line of Code as disscused prior Prabhakar Shrestha
      */
