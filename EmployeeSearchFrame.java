@@ -206,7 +206,8 @@ public class EmployeeSearchFrame extends JFrame {
             Statement deptStmt = conn.createStatement();
             ResultSet deptRs = deptStmt.executeQuery("SELECT Dname FROM DEPARTMENT ORDER BY Dname");
 
-            while(deptRs.next()) {
+			while (deptRs.next()) {
+				
                 department.addElement(deptRs.getString("Dname"));
             }
             deptRs.close();
@@ -216,7 +217,8 @@ public class EmployeeSearchFrame extends JFrame {
             Statement projStmt = conn.createStatement();
             ResultSet projRs = projStmt.executeQuery("SELECT Pname FROM PROJECT ORDER BY Pname");
 
-            while(projRs.next()) {
+			while (projRs.next()) {
+				
                 project.addElement(projRs.getString("Pname"));
             }
             projRs.close();
@@ -229,7 +231,7 @@ public class EmployeeSearchFrame extends JFrame {
                     "Database connection or query failed: " + ex.getMessage() + "\nCheck database name, credentials, and server status.",
                     "Database Error",
                     JOptionPane.ERROR_MESSAGE);
-        	}
+        }
 	}
 
 
